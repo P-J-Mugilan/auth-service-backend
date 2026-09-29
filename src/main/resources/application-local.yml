@@ -8,7 +8,9 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: validate
-
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
   data:
     redis:
       host: ${REDIS_HOST}
