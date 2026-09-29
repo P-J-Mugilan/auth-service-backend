@@ -24,11 +24,14 @@ class UserPersistenceAdapterTest {
         UUID publicId = UUID.randomUUID();
         Instant now = Instant.now();
 
+        String email = "persistence-test-" + UUID.randomUUID() + "@example.com";
+        String phoneNumber = "+919" + System.currentTimeMillis();
+
         User user = new User(
                 null,
                 publicId,
-                "persistence-test@example.com",
-                "+919876543210",
+                email,
+                phoneNumber,
                 "hashed-password",
                 UserStatus.PENDING_VERIFICATION,
                 false,
@@ -41,19 +44,19 @@ class UserPersistenceAdapterTest {
 
         assertThat(savedUser.getId()).isNotNull();
         assertThat(savedUser.getPublicId()).isEqualTo(publicId);
-        assertThat(savedUser.getEmail()).isEqualTo("persistence-test@example.com");
-        assertThat(savedUser.getPhoneNumber()).isEqualTo("+919876543210");
+        assertThat(savedUser.getEmail()).isEqualTo(email);
+        assertThat(savedUser.getPhoneNumber()).isEqualTo(phoneNumber);
         assertThat(savedUser.getPasswordHash()).isEqualTo("hashed-password");
         assertThat(savedUser.getStatus()).isEqualTo(UserStatus.PENDING_VERIFICATION);
         assertThat(savedUser.isEmailVerified()).isFalse();
         assertThat(savedUser.isPhoneVerified()).isFalse();
 
         User foundUser = userPersistenceAdapter
-                .findByEmail("persistence-test@example.com")
+                .findByEmail(email)
                 .orElseThrow();
 
         assertThat(foundUser.getId()).isEqualTo(savedUser.getId());
         assertThat(foundUser.getPublicId()).isEqualTo(publicId);
-        assertThat(foundUser.getEmail()).isEqualTo("persistence-test@example.com");
+        assertThat(foundUser.getEmail()).isEqualTo(email);
     }
 }
