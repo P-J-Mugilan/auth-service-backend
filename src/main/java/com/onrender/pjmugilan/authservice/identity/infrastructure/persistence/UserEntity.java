@@ -1,5 +1,6 @@
 package com.onrender.pjmugilan.authservice.identity.infrastructure.persistence;
 
+import com.onrender.pjmugilan.authservice.identity.domain.User;
 import com.onrender.pjmugilan.authservice.identity.domain.UserStatus;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -95,5 +96,39 @@ public class UserEntity {
 
     public Instant getUpdatedAt() {
         return updatedAt;
+    }
+
+
+    public User toDomain() {
+        return new User(
+                id,
+                publicId,
+                email,
+                phoneNumber,
+                passwordHash,
+                status,
+                emailVerified,
+                phoneVerified,
+                createdAt,
+                updatedAt
+        );
+
+
+    }
+
+    public static UserEntity fromDomain(User user) {
+        UserEntity entity = new UserEntity();
+
+        entity.publicId = user.getPublicId();
+        entity.email = user.getEmail();
+        entity.phoneNumber = user.getPhoneNumber();
+        entity.passwordHash = user.getPasswordHash();
+        entity.status = user.getStatus();
+        entity.emailVerified = user.isEmailVerified();
+        entity.phoneVerified = user.isPhoneVerified();
+        entity.createdAt = user.getCreatedAt();
+        entity.updatedAt = user.getUpdatedAt();
+
+        return entity;
     }
 }
